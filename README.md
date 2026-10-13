@@ -76,7 +76,7 @@ endpoints to update, then drains in-flight requests. Combined with
 
 ## Quick start (local)
 
-Prerequisites: Go 1.24+, Docker, and optionally `kind`, `kubectl`, `kustomize`,
+Prerequisites: Go 1.27+, Docker, and optionally `kind`, `kubectl`, `kustomize`,
 `kubeconform`, `hadolint`, `trivy`, `terraform` >= 1.10.
 
 ```bash
