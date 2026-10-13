@@ -1,0 +1,28 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# For a local kind cluster: uses the image loaded with `kind load docker-image`.
+resources:
+  - ../../base
+
+images:
+  - name: items-api
+    newName: items-api
+    newTag: local
+
+replicas:
+  - name: items-api
+    count: 1
+
+patches:
+  - target:
+      kind: Ingress
+      name: items-api
+    patch: |-
+      - op: remove
+        path: /metadata/annotations/cert-manager.io~1cluster-issuer
+      - op: remove
+        path: /spec/tls
+      - op: replace
+        path: /spec/rules/0/host
+        value: items-api.localtest.me

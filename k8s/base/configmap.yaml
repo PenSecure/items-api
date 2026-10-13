@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: items-api-config
+data:
+  PORT: "8080"
+  LOG_LEVEL: "info"
+  # Must be shorter than terminationGracePeriodSeconds minus shutdown time.
+  SHUTDOWN_DRAIN_SECONDS: "5"

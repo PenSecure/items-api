@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: items-api
+  annotations:
+    # Assumes cert-manager with a ClusterIssuer named letsencrypt.
+    cert-manager.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - items-api.example.com
+      secretName: items-api-tls
+  rules:
+    - host: items-api.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: items-api
+                port:
+                  name: http

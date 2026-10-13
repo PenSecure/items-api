@@ -1,0 +1,76 @@
+# Requires a CNI that enforces NetworkPolicy (Calico, Cilium, AWS VPC CNI
+# with network policy enabled). Without one, these objects are accepted but ignored.
+
+# 1. Default deny: nothing in or out of this namespace unless allowed below.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+---
+# 2. Ingress: only the ingress controller, only on the app port.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: items-api-allow-ingress
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: items-api
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: ingress-nginx
+      ports:
+        - port: 8080
+          protocol: TCP
+    # Uncomment to allow Prometheus scraping from the monitoring namespace.
+    # - from:
+    #     - namespaceSelector:
+    #         matchLabels:
+    #           kubernetes.io/metadata.name: monitoring
+    #   ports:
+    #     - port: 8080
+    #       protocol: TCP
+---
+# 3. Egress: DNS only. The service has no other outbound dependencies today.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: items-api-allow-egress
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: items-api
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    # When a database is added, allow only its CIDR and port, e.g.:
+    # - to:
+    #     - ipBlock:
+    #         cidr: 10.0.20.0/24
+    #   ports:
+    #     - port: 5432
+    #       protocol: TCP

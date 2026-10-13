@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+# CI updates newTag to the git SHA on merge to main (a GitOps controller
+# such as Argo CD would then sync it). Placeholder registry below.
+images:
+  - name: items-api
+    newName: 123456789012.dkr.ecr.eu-west-1.amazonaws.com/items-api
+    newTag: latest-placeholder
+
+patches:
+  - target:
+      kind: Ingress
+      name: items-api
+    patch: |-
+      - op: replace
+        path: /spec/rules/0/host
+        value: items-api.dev.example.com
+      - op: replace
+        path: /spec/tls/0/hosts/0
+        value: items-api.dev.example.com
