@@ -1,0 +1,28 @@
+# Accepted findings, with reasons. All are LOW/MEDIUM; CI only fails on
+# fixable HIGH/CRITICAL, but these are recorded here so they show as
+# explicitly accepted rather than silently absent.
+
+# S3 bucket logging is disabled on the Terraform state bucket. Needs a
+# separate log-target bucket; out of scope for this exercise. See README
+# Shortcuts.
+AVD-AWS-0089
+
+# ECR repository uses the default AES256 encryption, not a customer-managed
+# KMS key. The module supports a CMK via kms_key_arn; AES256 is an
+# intentional default for this exercise.
+AVD-AWS-0033
+
+# The base Dockerfile has no HEALTHCHECK. Kubernetes liveness/readiness
+# probes (startupProbe, livenessProbe on /healthz, readinessProbe on
+# /readyz) are the real health check in this deployment model.
+AVD-DS-0026
+
+# k8s/base is a Kustomize base, not deployed directly. The overlays set the
+# real image tag (CI writes the git SHA) and namespace (items-api); flagging
+# the base in isolation is a false positive.
+AVD-KSV-0013
+AVD-KSV-0110
+
+# The ConfigMap key is "PORT", a port number, not a secret. False positive
+# on the key name alone.
+AVD-KSV-01010
