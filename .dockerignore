@@ -1,0 +1,13 @@
+# Allowlist: ignore everything, then re-include only what the build needs.
+# This keeps secrets, .git, Terraform state and local tooling out of the
+# build context by default, rather than relying on remembering to exclude them.
+#
+# BuildKit reads <Dockerfile>.dockerignore next to the Dockerfile, which is
+# why this lives in docker/. The root .dockerignore is an identical copy for
+# legacy (non-BuildKit) builders; CI checks the two stay in sync.
+*
+
+!app/
+app/**/*_test.go
+app/**/testdata/
+app/coverage.out
