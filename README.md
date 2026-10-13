@@ -351,7 +351,7 @@ Shortcuts taken:
   Recorded in `.trivyignore` with the reason, alongside the other accepted findings.
 - **In-memory data.** The API has no database; the egress policy has a
   commented example for adding one.
-- Placeholder hostnames, account IDs and GitHub org (`your-org`) throughout.
+- Placeholder hostnames and AWS account IDs throughout.
 
 Next steps:
 

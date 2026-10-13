@@ -12,7 +12,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/your-org/items-api/internal/api"
+	"github.com/PenSecure/items-api/internal/api"
 )
 
 // version is injected at build time via -ldflags "-X main.version=...".
