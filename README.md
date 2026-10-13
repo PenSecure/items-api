@@ -340,8 +340,6 @@ inventory rather than hand-writing them.
 Shortcuts taken:
 
 - **No CD.** CI stops at pushing the image. Deploys are `kubectl apply -k`.
-- **No `.terraform.lock.hcl` committed.** Run `terraform init` once per root and
-  commit the lock files so provider versions are pinned.
 - **Single environment** (`dev`). Staging and prod would be extra
   `envs/` and `overlays/` directories reusing the same modules.
 - **No access logging on the state bucket** (needs a separate log bucket).
