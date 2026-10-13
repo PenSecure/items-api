@@ -1,4 +1,6 @@
-# Plan-only tests with a mocked AWS provider: no credentials, no cost, safe for CI.
+# Tests run against a mocked AWS provider: no credentials, no cost, safe for CI.
+# "ecr_is_hardened" applies (against the mock, not real AWS) because it asserts
+# on an output that is only known after apply; the others only need plan.
 #   terraform test   (from terraform/envs/dev)
 
 mock_provider "aws" {
@@ -12,11 +14,11 @@ mock_provider "aws" {
 
 variables {
   allowed_account_ids = ["123456789012"]
-  github_repository   = "your-org/items-api"
+  github_repository   = "PenSecure/items-api"
 }
 
 run "ecr_is_hardened" {
-  command = plan
+  command = apply
 
   assert {
     condition     = module.ecr.repository_name == "items-api"

@@ -1,0 +1,24 @@
+# Terraform
+.terraform/
+.terraform.tfstate.lock.info
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+backend.hcl
+!backend.hcl.example
+
+# Go
+app/coverage.out
+app/coverage.html
+/items-api
+
+# Container
+*.tar
+
+# OS / editor
+.DS_Store
